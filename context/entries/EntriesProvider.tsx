@@ -8,26 +8,7 @@ export interface EntriesState {
 }
 
 const Entries_INITIAL_STATE: EntriesState = {
-  entries: [
-    {
-      _id: uuidv4(),
-      description: 'Pending a pretty super sexy description',
-      status: 'pending',
-      createdAt: Date.now(),
-    },
-    {
-      _id: uuidv4(),
-      description: 'in-progress Just an in-progress description',
-      status: 'in-progress',
-      createdAt: Date.now() - 1000000,
-    },
-    {
-      _id: uuidv4(),
-      description: 'completed Just a completed description',
-      status: 'completed',
-      createdAt: Date.now() - 20000000,
-    },
-  ],
+  entries: [],
 };
 
 interface Props {
@@ -59,7 +40,7 @@ export const EntriesProvider: FC<Props> = ({ children }) => {
 
         //Methods
         addNewEntry,
-        updateEntry
+        updateEntry,
       }}
     >
       {children}
