@@ -12,6 +12,7 @@ const entrySchema = new Schema({
       values: ['pending', 'in-progress', 'completed'],
       message: '{VALUE} is not an allowed state',
     },
+    default: 'pending',
   },
 });
 
