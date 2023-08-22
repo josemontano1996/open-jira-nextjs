@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useMemo, FC } from 'react';
+import { useState, ChangeEvent, useMemo, FC, useContext } from 'react';
 import { GetServerSideProps } from 'next';
 import {
   capitalize,
@@ -19,20 +19,23 @@ import {
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { dbEntries } from '@/database';
+import { EntriesContext } from '@/context/entries';
 import { Layout } from '@/components/layouts';
 import { Entry, EntryStatus } from '@/interfaces';
+import { useRouter } from 'next/router';
 
 const validStatus: EntryStatus[] = ['pending', 'in-progress', 'completed'];
 
 interface Props {
-  entry: Entry
+  entry: Entry;
 }
 
-const EntryPage: FC<Props> = ({entry}) => {
-  console.log(entry);
+const EntryPage: FC<Props> = ({ entry }) => {
+  const { updateEntry, deleteEntry } = useContext(EntriesContext);
   const [inputValue, setInputValue] = useState(entry.description);
   const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState(false);
+  const router = useRouter();
 
   const isNotValid = useMemo(() => inputValue.length <= 0 && touched, [inputValue, touched]);
 
@@ -44,10 +47,23 @@ const EntryPage: FC<Props> = ({entry}) => {
     setStatus(event.target.value as EntryStatus);
   };
 
-  const onSave = () => {};
+  const onSave = () => {
+    if (inputValue.trim().length === 0) return;
+    const updatedEntry: Entry = {
+      ...entry,
+      description: inputValue,
+      status,
+    };
+    updateEntry(updatedEntry, true);
+  };
+
+  const onDelete = async () => {
+    await deleteEntry(entry._id);
+    router.push('/');
+  };
 
   return (
-    <Layout title={inputValue.substring(0,20) + '...'}>
+    <Layout title={inputValue.substring(0, 20) + '...'}>
       <Grid container justifyContent='center' sx={{ marginTop: 2 }}>
         <Grid item xs={12} sm={8} md={6}>
           <Card>
@@ -95,6 +111,7 @@ const EntryPage: FC<Props> = ({entry}) => {
         </Grid>
       </Grid>
       <IconButton
+        onClick={onDelete}
         sx={{
           position: 'fixed',
           bottom: 30,
