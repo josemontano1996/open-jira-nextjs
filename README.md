@@ -1,6 +1,6 @@
 # Next.js OpenJira App
 
-This is a NextJs OpenJira App, with it you can create, update, delete and even drag whatever entries you have created. It is connected to a MongoDB database through an API so data can persist.
+This is a NextJs OpenJira App, with it you can create, update, delete and even drag whatever entries you have created. It is connected to a MongoDB database through the Next API so data can persist.
 
 To run locally, you will need the database.
 
